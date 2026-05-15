@@ -1,0 +1,23 @@
+const express = require("express");
+const app = express();
+
+app.get("/", (req, res) => {
+    const ip =
+        req.headers["x-forwarded-for"] ||
+        req.socket.remoteAddress;
+
+    console.log("Visitor Info:");
+    console.log("IP:", ip);
+    console.log("User-Agent:", req.headers["user-agent"]);
+    console.log("Time:", new Date().toISOString());
+
+    res.send(`
+        <h1>Cybersecurity Awareness Demo</h1>
+        <p>oh tanginamo kalma ikaw lang nakakakita nyan, this is for awareness that you dont click random links from strangers</p>
+        <p>Your IP: ${ip}</p>
+    `);
+});
+
+app.listen(3000, () => {
+    console.log("Running on http://localhost:3000");
+});
