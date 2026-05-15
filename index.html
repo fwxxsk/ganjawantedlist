@@ -1,23 +1,632 @@
-const express = require("express");
-const app = express();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="RANSXM - Gaming NFT Community">
+    <title>RANSXM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-app.get("/", (req, res) => {
-    const ip =
-        req.headers["x-forwarded-for"] ||
-        req.socket.remoteAddress;
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+        }
 
-    console.log("Visitor Info:");
-    console.log("IP:", ip);
-    console.log("User-Agent:", req.headers["user-agent"]);
-    console.log("Time:", new Date().toISOString());
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
 
-    res.send(`
-        <h1>Cybersecurity Awareness Demo</h1>
-        <p>oh tanginamo kalma ikaw lang nakakakita nyan, this is for awareness that you dont click random links from strangers</p>
-        <p>Your IP: ${ip}</p>
-    `);
-});
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-app.listen(3000, () => {
-    console.log("Running on http://localhost:3000");
-});
+        .logo {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background: #ff0000;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: #ffffff;
+            font-size: 12px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+            text-transform: uppercase;
+        }
+
+        .nav-menu a:hover {
+            color: #ff0000;
+        }
+
+        .nav-menu a.active {
+            color: #ff0000;
+            border-bottom: 2px solid #ff0000;
+            padding-bottom: 5px;
+        }
+
+        .products-btn {
+            padding: 10px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .products-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-dots {
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+        }
+
+        /* Container */
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding-top: 70px;
+        }
+
+        /* Section Styles */
+        section {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 60px 40px;
+            background: #000000;
+        }
+
+        section.dark {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+
+        section.light {
+            background: #1a1a1a;
+        }
+
+        /* ========================================
+           SECTION 1: THREAT TO EVERYONE
+           ======================================== */
+        .threat-section {
+            padding: 80px 40px;
+        }
+
+        .threat-title {
+            text-align: center;
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 60px;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            color: #ffffff;
+            /* LINE 1: EDIT TITLE TEXT HERE */
+            /* Change "Threat to Everyone" text */
+        }
+
+        .threat-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .threat-card {
+            border-radius: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            cursor: pointer;
+            height: 300px;
+        }
+
+        .threat-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 0, 0, 0.5);
+        }
+
+        .threat-card-image {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #333333, #1a1a1a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            /* LINE 2: ADD THREAT CARD IMAGES HERE (3 cards)*/
+            /* Background image path: assets/threat/threat1.jpg */
+            /* <img src="assets/threat/threat1.jpg" alt="Threat 1" style="width:100%; height:100%; object-fit:cover;"> */
+        }
+
+        /* ========================================
+           SECTION 2: MENACE SECTION
+           ======================================== */
+        .menace-section {
+            padding: 80px 40px;
+            background: #0a0a0a;
+        }
+
+        .menace-title {
+            text-align: center;
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 60px;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            color: #ffffff;
+            /* LINE 3: EDIT MENACE TITLE TEXT HERE */
+            /* Change "MENACE" text */
+        }
+
+        .menace-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .menace-card {
+            border-radius: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            cursor: pointer;
+            height: 300px;
+        }
+
+        .menace-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 0, 0, 0.5);
+        }
+
+        .menace-card-image {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #333333, #1a1a1a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            /* LINE 4: ADD MENACE CARD IMAGES HERE (varies) */
+            /* Background image path: assets/menace/menace1.jpg */
+            /* <img src="assets/menace/menace1.jpg" alt="Menace 1" style="width:100%; height:100%; object-fit:cover;"> */
+        }
+
+        /* ========================================
+           SECTION 3: MEMBERS SECTION
+           ======================================== */
+        .members-section {
+            padding: 80px 40px;
+            background: #1a1a1a;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 60px;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            color: #ffffff;
+            /* LINE 5: EDIT MEMBERS SECTION TITLE HERE */
+            /* Change "MEMBERS" text */
+        }
+
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .member-item {
+            border-radius: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            background: rgba(30, 30, 30, 0.8);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            cursor: pointer;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .member-item:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 0, 0, 0.5);
+            background: rgba(50, 50, 50, 0.8);
+        }
+
+        .member-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #ff6b6b, #ff0000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 8px 24px rgba(255, 0, 0, 0.3);
+            overflow: hidden;
+            /* LINE 6: ADD MEMBER PROFILE IMAGES HERE */
+            /* Background image path: assets/members/member1.jpg */
+            /* <img src="assets/members/member1.jpg" alt="Member 1" style="width:100%; height:100%; object-fit:cover;"> */
+        }
+
+        .member-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            /* LINE 7: EDIT MEMBER NAMES HERE */
+            /* Change member name text */
+        }
+
+        .member-role {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 15px;
+            /* LINE 8: EDIT MEMBER ROLES HERE */
+            /* Change role/title text */
+        }
+
+        .member-description {
+            font-size: 13px;
+            color: #999;
+            line-height: 1.6;
+            /* LINE 9: EDIT MEMBER DESCRIPTIONS HERE */
+            /* Add member bio/description text */
+        }
+
+        /* ========================================
+           SECTION 4: ABOUT US SECTION
+           ======================================== */
+        .about-section {
+            padding: 80px 40px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+
+        .about-title {
+            text-align: center;
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 60px;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            color: #ffffff;
+            /* LINE 10: EDIT ABOUT US TITLE HERE */
+            /* Change "ABOUT US" text */
+        }
+
+        .about-content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-text {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .about-paragraph {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #ddd;
+            /* LINE 11: EDIT ABOUT US PARAGRAPH 1 HERE */
+            /* Add your about us text content */
+        }
+
+        .about-image {
+            width: 100%;
+            height: 400px;
+            border-radius: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            background: linear-gradient(135deg, #333333, #1a1a1a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            /* LINE 12: ADD ABOUT US IMAGE HERE */
+            /* Background image path: assets/about/about-banner.jpg */
+            /* <img src="assets/about/about-banner.jpg" alt="About" style="width:100%; height:100%; object-fit:cover;"> */
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: rgba(20, 20, 20, 0.95);
+            margin: auto;
+            padding: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translate(-50%, -30%);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%);
+                opacity: 1;
+            }
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #ff0000;
+        }
+
+        .modal-btn {
+            padding: 12px 28px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            background: transparent;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .modal-btn:hover {
+            background: #ff0000;
+            border-color: #ff0000;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            section {
+                padding: 40px 20px;
+            }
+
+            .threat-title,
+            .menace-title,
+            .section-title,
+            .about-title {
+                font-size: 36px;
+            }
+
+            .threat-cards,
+            .menace-cards,
+            .members-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .about-image {
+                height: 300px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🎮</div>
+            <span>RANSXM</span>
+        </div>
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="#threat" class="nav-link active">HOF</a></li>
+            <li><a href="#threat" class="nav-link">TTE</a></li>
+            <li><a href="#menace" class="nav-link">EXCLUSIVE</a></li>
+            <li><a href="#members" class="nav-link">MEMBERS</a></li>
+            <li><a href="#about" class="nav-link">SERVERS</a></li>
+            <li><a href="#about" class="nav-link">ARCS</a></li>
+        </ul>
+        <button class="products-btn">≡</button>
+    </nav>
+
+    <div class="container">
+        <!-- ========================================
+             SECTION 1: THREAT TO EVERYONE
+             ======================================== -->
+        <section class="threat-section dark" id="threat">
+            <h1 class="threat-title">Threat to Everyone</h1>
+            <!-- LINE 1: EDIT TITLE TEXT ABOVE (currently "Threat to Everyone") -->
+
+            <div class="threat-cards">
+                <!-- Card 1 -->
+                <div class="threat-card" onclick="openModal('Threat Card 1', 'Description goes here')">
+                    <div class="threat-card-image">
+                        <!-- LINE 2A: ADD FIRST THREAT CARD IMAGE -->
+                        <!-- Replace with: <img src="assets/threat/threat1.jpg" alt="Threat 1" style="width:100%; height:100%; object-fit:cover;"> -->
+                        <span>Image 1</span>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="threat-card" onclick="openModal('Threat Card 2', 'Description goes here')">
+                    <div class="threat-card-image">
+                        <!-- LINE 2B: ADD SECOND THREAT CARD IMAGE -->
+                        <!-- Replace with: <img src="assets/threat/threat2.jpg" alt="Threat 2" style="width:100%; height:100%; object-fit:cover;"> -->
+                        <span>Image 2</span>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="threat-card" onclick="openModal('Threat Card 3', 'Description goes here')">
+                    <div class="threat-card-image">
+                        <!-- LINE 2C: ADD THIRD THREAT CARD IMAGE -->
+                        <!-- Replace with: <img src="assets/threat/threat3.jpg" alt="Threat 3" style="width:100%; height:100%; object-fit:cover;"> -->
+                        <span>Image 3</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             SECTION 2: MENACE
+             ======================================== -->
+        <section class="menace-section" id="menace">
+            <h1 class="menace-title">MENACE</h1>
+            <!-- LINE 3: EDIT TITLE TEXT ABOVE (currently "MENACE") -->
+
+            <div class="menace-cards">
+                <!-- Menace Card 1 -->
+                <div class="menace-card" onclick="openModal('Menace 1', 'Description goes here')">
+                    <div class="menace-card-image">
+                        <!-- LINE 4A: ADD FIRST MENACE CARD IMAGE -->
+                        <!-- Replace with: <img src="assets/menace/menace1.jpg" alt="Menace 1" style="width:100%; height:100%; object-fit:cover;"> -->
+                        <span>Image 1</span>
+                    </div>
+                </div>
+
+                <!-- Menace Card 2 -->
+                <div class="menace-card" onclick="openModal('Menace 2', 'Description goes here')">
+                    <div class="menace-card-image">
+                        <!-- LINE 4B: ADD SECOND MENACE CARD IMAGE -->
+                        <!-- Replace with: <img src="assets/menace/menace2.jpg" alt="Menace 2" style="width:100%; height:100%; object-fit:cover;"> -->
+                        <span>Image 2</span>
+                    </div>
+                </div>
+
+                <!-- Menace Card 3 -->
+                <div class="menace-card" onclick="openModal('Menace 3', 'Description goes here')">
+                    <div class="menace-card-image">
+                        <!-- LINE 4C: ADD THIRD MENACE CARD IMAGE -->
+                        <!-- Replace with: <img src="assets/menace/menace3.jpg" alt="Menace 3" style="width:100%; height:100%; object-fit:cover;"> -->
+                        <span>Image 3</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             SECTION 3: MEMBERS
+             ======================================== -->
+        <section class="members-section" id="members">
+            <h1 class="section-title">MEMBERS</h1>
+            <!-- LINE 5: EDIT TITLE TEXT ABOVE (currently "MEMBERS") -->
+
+            <div class="members-grid">
+                <!-- Member 1 -->
+                <div class="member-item" onclick="openModal('Member 1', 'Member description goes here')">
+                    <div class="member-avatar">
+                        <!-- LINE 6A: ADD FIRST MEMBER IMAGE -->
+                        <!-- Replace with: <img src="assets/members/member1
